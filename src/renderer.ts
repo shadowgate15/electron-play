@@ -27,18 +27,18 @@
  */
 
 import "./index.css";
-import $ from "jquery";
 import { ipcRenderer } from "electron";
 
 console.log(
   '👋 This message is being logged by "renderer.js", included via webpack'
 );
 
-$(async () => {
-  try {
-    $("#engine").text(await ipcRenderer.invoke("get-part", "engine"));
-    $("#overall").text(await ipcRenderer.invoke("get-overall"));
-  } catch (err) {
-    console.log(err);
-  }
-});
+(async () => {
+  document.getElementById("engine").innerText = await ipcRenderer.invoke(
+    "get-part",
+    "engine"
+  );
+  document.getElementById("overall").innerText = await ipcRenderer.invoke(
+    "get-overall"
+  );
+})();
