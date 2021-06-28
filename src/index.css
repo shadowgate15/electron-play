@@ -1,6 +1,23 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
   margin: auto;
   max-width: 38rem;
   padding: 2rem;
+}
+
+.part {
+  cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    color: black;
+  }
 }

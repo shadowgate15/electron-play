@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-
+    <meta charset="UTF-8" />
+    <title>Electron Playground</title>
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <p>
+      Below is a rating scale (1-10) for different car parts.<br />
+      You can change these by clicking on them!<br />
+      Changes will be used to determine final rating.
+    </p>
+
+    <h1>Car Stats</h1>
+    <ul>
+      <li class="part" id="engineListItem" part="engine">
+        Engine: <span id="engine"></span>
+      </li>
+    </ul>
+
+    <h2>Overall: <span id="overall"></span></h2>
   </body>
 </html>
