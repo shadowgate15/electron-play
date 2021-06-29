@@ -4,6 +4,7 @@ import { app, BrowserWindow, ipcMain } from "electron";
 // whether you're running in development or production).
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+declare const DETAIL_WINDOW_WEBPACK_ENTRY: string;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -18,6 +19,7 @@ const createWindow = (): void => {
     width: 800,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      nativeWindowOpen: true,
     },
   });
 
@@ -26,6 +28,27 @@ const createWindow = (): void => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (url === DETAIL_WINDOW_WEBPACK_ENTRY) {
+      return {
+        action: "allow",
+        overrideBrowserWindowOptions: {
+          height: 200,
+          width: 400,
+          frame: false,
+          resizable: false,
+          movable: false,
+          minimizable: false,
+          alwaysOnTop: true,
+          fullscreenable: false,
+          skipTaskbar: true,
+          titleBarStyle: "hidden",
+        },
+      };
+    }
+    return { action: "deny" };
+  });
 };
 
 // This method will be called when Electron has finished
@@ -54,6 +77,7 @@ app.on("activate", () => {
 // code. You can also put them in separate files and import them here.
 const parts: { [index: string]: number } = {
   engine: 5,
+  tire: 5,
 };
 
 ipcMain.handle("get-part", (_, part: string): number => {

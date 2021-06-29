@@ -25,6 +25,7 @@
  *  });
  * ```
  */
+declare const DETAIL_WINDOW_WEBPACK_ENTRY: string;
 
 import "./index.css";
 const ipcRenderer = window.ipcRenderer;
@@ -34,11 +35,32 @@ console.log(
 );
 
 (async () => {
-  document.getElementById("engine").innerText = await ipcRenderer.invoke(
-    "get-part",
-    "engine"
-  );
   document.getElementById("overall").innerText = await ipcRenderer.invoke(
     "get-overall"
   );
+
+  const elems = document.getElementsByClassName("part");
+  let promises = [];
+
+  for (let i = 0; i < elems.length; i++) {
+    const elem = elems.item(i);
+    const part = elem.getAttribute("data-part");
+
+    elem.addEventListener("click", () => {
+      const win = window.open(DETAIL_WINDOW_WEBPACK_ENTRY);
+      win.onload = () => {
+        win.postMessage({ type: "part-select", part }, "*");
+      };
+    });
+
+    promises.push(ipcRenderer.invoke("get-part", part));
+  }
+
+  promises = await Promise.all(promises);
+
+  for (let i = 0; i < elems.length; i++) {
+    const elem = elems.item(i);
+    document.getElementById(elem.getAttribute("data-part")).innerHTML =
+      promises[i];
+  }
 })();
