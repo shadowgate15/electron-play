@@ -1,5 +1,14 @@
-/// <reference path="../../node_modules/electron/electron.d" />
-
 interface Window {
-  ipcRenderer: Electron.IpcRenderer;
+  ipc: {
+    getPart: (part: string) => Promise<string>;
+    getOverall: () => Promise<string>;
+    setPart: (part: string, value: string) => void;
+    updatePart: (
+      listener: (
+        event: Electron.IpcRendererEvent,
+        part: string,
+        value: string
+      ) => void
+    ) => void;
+  };
 }

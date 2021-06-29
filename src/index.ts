@@ -12,9 +12,11 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
+let mainWindow: BrowserWindow;
+
 const createWindow = (): void => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     height: 600,
     width: 800,
     webPreferences: {
@@ -91,9 +93,9 @@ ipcMain.handle("get-overall", (): number => {
   return sum;
 });
 
-ipcMain.on("set-part", (_, part: string, value: number) => {
-  console.log(value);
-  ipcMain.emit("update-part", part, value);
-  parts[part] = value;
-  console.log(parts[part]);
+ipcMain.on("set-part", (_, part: string, value: string) => {
+  if (mainWindow) {
+    mainWindow.webContents.send("update-part", part, value);
+  }
+  parts[part] = Number.parseInt(value);
 });

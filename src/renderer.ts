@@ -28,16 +28,16 @@
 declare const DETAIL_WINDOW_WEBPACK_ENTRY: string;
 
 import "./index.css";
-const ipcRenderer = window.ipcRenderer;
+const ipc = window.ipc;
 
 console.log(
   '👋 This message is being logged by "renderer.js", included via webpack'
 );
 
 (async () => {
-  document.getElementById("overall").innerText = await ipcRenderer.invoke(
-    "get-overall"
-  );
+  document.getElementById("overall").innerText = (
+    await ipc.getOverall()
+  ).toString();
 
   const elems = document.getElementsByClassName("part");
   let promises = [];
@@ -54,7 +54,7 @@ console.log(
       };
     });
 
-    promises.push(ipcRenderer.invoke("get-part", part));
+    promises.push(ipc.getPart(part));
   }
 
   promises = await Promise.all(promises);
@@ -66,6 +66,9 @@ console.log(
   }
 })();
 
-ipcRenderer.on("update-part", (_, part: string, value: number) => {
-  document.getElementById(part).innerHTML = value.toString();
+ipc.updatePart(async (_, part: string, value: string) => {
+  document.getElementById(part).innerHTML = value;
+  document.getElementById("overall").innerText = (
+    await ipc.getOverall()
+  ).toString();
 });

@@ -9,17 +9,10 @@ window.onmessage = async (ev) => {
 
     const slider = document.getElementById("slider");
 
-    slider.setAttribute(
-      "value",
-      await window.ipcRenderer.invoke("get-part", ev.data.part)
-    );
+    slider.setAttribute("value", await window.ipc.getPart(ev.data.part));
 
     slider.oninput = function (this: HTMLInputElement) {
-      window.ipcRenderer.send(
-        "set-part",
-        ev.data.part,
-        Number.parseInt(this.value)
-      );
+      window.ipc.setPart(ev.data.part, this.value);
     };
   }
 };
