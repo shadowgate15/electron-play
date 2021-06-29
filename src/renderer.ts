@@ -48,6 +48,7 @@ console.log(
 
     elem.addEventListener("click", () => {
       const win = window.open(DETAIL_WINDOW_WEBPACK_ENTRY);
+
       win.onload = () => {
         win.postMessage({ type: "part-select", part }, "*");
       };
@@ -64,3 +65,7 @@ console.log(
       promises[i];
   }
 })();
+
+ipcRenderer.on("update-part", (_, part: string, value: number) => {
+  document.getElementById(part).innerHTML = value.toString();
+});

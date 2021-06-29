@@ -36,14 +36,11 @@ const createWindow = (): void => {
         overrideBrowserWindowOptions: {
           height: 200,
           width: 400,
-          frame: false,
           resizable: false,
-          movable: false,
           minimizable: false,
           alwaysOnTop: true,
           fullscreenable: false,
           skipTaskbar: true,
-          titleBarStyle: "hidden",
         },
       };
     }
@@ -77,6 +74,7 @@ app.on("activate", () => {
 // code. You can also put them in separate files and import them here.
 const parts: { [index: string]: number } = {
   engine: 5,
+  transmission: 5,
   tire: 5,
 };
 
@@ -91,4 +89,11 @@ ipcMain.handle("get-overall", (): number => {
   }
 
   return sum;
+});
+
+ipcMain.on("set-part", (_, part: string, value: number) => {
+  console.log(value);
+  ipcMain.emit("update-part", part, value);
+  parts[part] = value;
+  console.log(parts[part]);
 });
